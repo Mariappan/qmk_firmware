@@ -5,5 +5,4 @@ MCU = STM32F103
 OPT_DEFS += -DCORTEX_ENABLE_WFI_IDLE=TRUE
 
 # project specific files
-SRC = matrix.c \
-      led.c
+SRC = led.c
