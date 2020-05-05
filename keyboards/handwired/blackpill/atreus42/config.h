@@ -5,8 +5,8 @@
 #define PRODUCT_ID      0xBEEF
 #define DEVICE_VER      0x0001
 
-#define MANUFACTURER QMK
-#define PRODUCT Atreus42 Keyboard
+#define MANUFACTURER    QMK
+#define PRODUCT         Atreus42 Keyboard
 #define DESCRIPTION     QMK keyboard firmware for Atreus
 
 /* key matrix size */
