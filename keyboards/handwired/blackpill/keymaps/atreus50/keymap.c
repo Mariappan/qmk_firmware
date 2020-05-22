@@ -21,22 +21,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
-#define _QWERTY 0
-#define _COLEMAK 1
-#define _DVORAK 2
-#define _LOWER 3
-#define _RAISE 4
+#define _QWERTY   0
+#define _RAISE    1
+#define _LOWER    2
+#define _MOUSE    3
+#define _EMPTY    4
 #define _MOVEMENT 5
-#define _ADJUST 16
+#define _COLEMAK  6
+#define _DVORAK   7
+#define _ADJUST   8
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
+  RAISE,
+  LOWER,
+  MOUSE,
+  MOVEMENT,
   COLEMAK,
   DVORAK,
-  LOWER,
-  RAISE,
-  MOVEMENT,
-  BACKLIT,
   PASSWORD
 };
 
@@ -45,27 +47,40 @@ enum custom_keycodes {
 #define X3 MO(_MOVEMENT)
 #define X4 MT(MOD_LSFT, KC_ENT)  // Hold for Left Shift, Tap for Enter
 
+#define __QWERT TO(_QWERTY)
+#define __LOWER TG(_LOWER)
+#define __MOUSE TG(_MOUSE)
+
+#undef _______
+#define _______ XXXXXXX
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_QWERTY] = LAYOUT(
     X0,      KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                      KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS,
     KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                      KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_F12,
     KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                      KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, X4,
-    C_S_T(KC_ESC),  KC_ESC, KC_TAB, KC_LGUI,  KC_LSFT, KC_BSPC,  KC_LCTL, KC_LALT, KC_SPC,  MO(_RAISE), KC_MINS, KC_QUOT, KC_ENT,  LCA_T(KC_ENT)
+    LGUI_T(KC_ESC),  KC_ESC, KC_TAB, KC_LGUI,  KC_LSFT, KC_BSPC,  KC_LCTL, KC_LALT, KC_SPC,  MO(_RAISE), KC_MINS, KC_QUOT, KC_ENT,  C_S_T(KC_ENT)
   ),
 
-  [_COLEMAK] = LAYOUT(
-    KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                      KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_MINS,
-    X0,      KC_A,    KC_R,    KC_S,    KC_T,    KC_D,                      KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT,
-    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                      KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, X4,
-    KC_GRV,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  X3,      KC_RSFT, KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  /*
+   *  !       @     up     {    }        ||     pgup    7     8     9    *
+   *  #     left   down  right  $        ||     pgdn    4     5     6    +
+   *  [       ]      (     )    &        ||       `     1     2     3    \
+   * lower  insert super shift bksp ctrl || alt space   fn    .     0    =
+   */
+  [_RAISE] = LAYOUT(
+    _______, KC_EXLM, KC_AT,   KC_UP,   KC_LCBR, KC_RCBR,                    KC_PGUP, KC_7,    KC_8,   KC_9, KC_ASTR , RESET,
+    KC_DEL,  KC_HASH, KC_LEFT, KC_DOWN, KC_RGHT, KC_DLR,                     KC_PGDN, KC_4,    KC_5,   KC_6, KC_PLUS , PASSWORD,
+    _______, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_AMPR,                    KC_GRV,  KC_1,    KC_2,   KC_3, KC_BSLS , KC_F12,
+    _______, __LOWER, __MOUSE,  KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC,  KC_TRNS, KC_DOT, KC_0, KC_EQL  , KC_ENT
   ),
 
-  [_DVORAK] = LAYOUT(
-    KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,                      KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_MINS,
-    X0,      KC_A,    KC_O,    KC_E,    KC_U,    KC_I,                      KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_SLSH,
-    KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,                      KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    X4,
-    KC_GRV,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  X3,      KC_RSFT, KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  [_MOUSE] = LAYOUT(
+    _______, _______, KC_BTN1, KC_WH_U, KC_BTN2, _______,                   _______, _______, KC_MS_U, _______, _______, _______,
+    _______, _______, KC_WH_L, KC_WH_D, KC_WH_R, _______,                   _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
+    _______, _______, _______, _______, _______, _______,                   _______, KC_ACL0, KC_ACL1, KC_ACL2, _______, _______,
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, __QWERT, _______, _______, _______, _______
   ),
 
   /*
@@ -78,20 +93,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TILD, KC_INS,  KC_HOME, KC_UP,   KC_END,  KC_PGUP,                   KC_UP,   KC_F7,   KC_F8,   KC_F9,   KC_F10  , KC_DEL,
     KC_DEL,  KC_DEL,  KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN,                   KC_DOWN, KC_F4,   KC_F5,   KC_F6,   KC_F11  , KC_PIPE,
     _______, KC_NO,   KC_VOLU, KC_NO,   KC_NO,   RESET,                     KC_NO,   KC_F1,   KC_F2,   KC_F3,   KC_F12  , _______,
-    _______, KC_NO,   KC_VOLD, KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC,  TO(_QWERTY), KC_PSCR, KC_SLCK, KC_PAUS , KC_MPLY
+    _______, KC_NO,   KC_VOLD, KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC,  __QWERT, KC_PSCR, KC_SLCK, KC_PAUS , KC_MPLY
   ),
 
-  /*
-   *  !       @     up     {    }        ||     pgup    7     8     9    *
-   *  #     left   down  right  $        ||     pgdn    4     5     6    +
-   *  [       ]      (     )    &        ||       `     1     2     3    \
-   * lower  insert super shift bksp ctrl || alt space   fn    .     0    =
-   */
-  [_RAISE] = LAYOUT(
-    _______,  KC_EXLM, KC_AT,   KC_UP,   KC_LCBR, KC_RCBR,                   KC_PGUP, KC_7,    KC_8,   KC_9, KC_ASTR , RESET,
-    KC_DEL,  KC_HASH, KC_LEFT, KC_DOWN, KC_RGHT, KC_DLR,                    KC_PGDN, KC_4,    KC_5,   KC_6, KC_PLUS , PASSWORD,
-    _______, KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_AMPR,                   KC_GRV,  KC_1,    KC_2,   KC_3, KC_BSLS , _______,
-    _______, TG(_LOWER), KC_INS,  KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC,  KC_TRNS, KC_DOT, KC_0, KC_EQL  , KC_ENT
+  [_EMPTY] = LAYOUT(
+    _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
   ),
 
   [_MOVEMENT] = LAYOUT(
@@ -117,29 +126,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, AU_ON,   AU_OFF,  AG_NORM,                   AG_SWAP, QWERTY,  COLEMAK, DVORAK,  _______, _______, \
     _______, MUV_DE,  MUV_IN,  MU_ON,   MU_OFF,  MI_ON,                     MI_OFF,  _______, _______, _______, _______, _______, \
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ \
+  ),
+
+  [_COLEMAK] = LAYOUT(
+    KC_TAB,  KC_Q,    KC_W,    KC_F,    KC_P,    KC_G,                      KC_J,    KC_L,    KC_U,    KC_Y,    KC_SCLN, KC_MINS,
+    X0,      KC_A,    KC_R,    KC_S,    KC_T,    KC_D,                      KC_H,    KC_N,    KC_E,    KC_I,    KC_O,    KC_QUOT,
+    KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                      KC_K,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, X4,
+    KC_GRV,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  X3,      KC_RSFT, KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
+  ),
+
+  [_DVORAK] = LAYOUT(
+    KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,                      KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_MINS,
+    X0,      KC_A,    KC_O,    KC_E,    KC_U,    KC_I,                      KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_SLSH,
+    KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,                      KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    X4,
+    KC_GRV,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  X3,      KC_RSFT, KC_BSPC, RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT
   )
 
 };
-
-
-/* Layer based ilumination, just binary */
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//   switch (get_highest_layer(state)) {
-//   case _FNONE:
-//     palSetPad(GPIOA, 0);  //OFF Color A
-//     palClearPad(GPIOA, 1); //ON Color B
-//     break;
-//   case _FNTWO:
-//     palClearPad(GPIOA, 0); //ON Color A
-//     palClearPad(GPIOA, 1);  //ON Color B
-//     break;
-//   default: //  for any other layers, or the default layer
-//     palClearPad(GPIOA, 0); //ON Color A
-//     palSetPad(GPIOA, 1);  //OFF Color B
-//     break;
-//   }
-//   return state;
-// }
 
 void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
@@ -151,6 +154,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case QWERTY:
           if (record->event.pressed) {
             persistent_default_layer_set(1UL<<_QWERTY);
+                
           }
           return false;
           break;
@@ -166,16 +170,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           }
           return false;
           break;
-        case LOWER:
-          if (record->event.pressed) {
-            layer_on(_LOWER);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-          } else {
-            layer_off(_LOWER);
-            update_tri_layer(_LOWER, _RAISE, _ADJUST);
-          }
-          return false;
-          break;
         case RAISE:
           if (record->event.pressed) {
             layer_on(_RAISE);
@@ -186,11 +180,29 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           }
           return false;
           break;
-        case BACKLIT:
+        case LOWER:
           if (record->event.pressed) {
-            register_code(KC_RSFT);
+            layer_on(_LOWER);
+            update_tri_layer(_LOWER, _RAISE, _ADJUST);
           } else {
-            unregister_code(KC_RSFT);
+            layer_off(_LOWER);
+            update_tri_layer(_LOWER, _RAISE, _ADJUST);
+          }
+          return false;
+          break;
+        case MOUSE:
+          if (record->event.pressed) {
+            layer_on(_MOUSE);
+            update_tri_layer(_MOUSE, _RAISE, _ADJUST);
+          } else {
+            layer_off(_MOUSE);
+            update_tri_layer(_MOUSE, _RAISE, _ADJUST);
+          }
+          return false;
+          break;
+        case PASSWORD:
+          if (record->event.pressed) {
+            SEND_STRING("#$Aricent12"SS_TAP(X_ENTER));
           }
           return false;
           break;
@@ -211,11 +223,6 @@ static void render_logo(void) {
         0x80, 0x80, 0x80, 0x80, 0x80,
         0x80, 'Q',  'M',  'K',  '\n', '\n', '\n', 0x00
     };
-    // static const char PROGMEM qmk_logo[] = {
-    //     0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94,
-    //     0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4,
-    //     0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA, 0xCB, 0xCC, 0xCD, 0xCE, 0xCF, 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0x00
-    // };
 
     oled_write_P(qmk_logo, false);
 }
@@ -252,6 +259,10 @@ void oled_task_user(void) {
             oled_write_P(PSTR("LOWR\n"), false);
             oled_write_P(PSTR("\n"), false);
             break;
+        case _MOUSE:
+            oled_write_P(PSTR("MOUSE\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            break;
         default:
             // Or use the write_ln shortcut over adding '\n' to the end of your string
             oled_write_ln_P(PSTR("UND"), false);
@@ -259,10 +270,19 @@ void oled_task_user(void) {
     }
 
     // Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_ln_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
-    oled_write_ln_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
-    oled_write_ln_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+    // led_t led_state = host_keyboard_led_state();
+    // oled_write_ln_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
+    // oled_write_ln_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
+    // oled_write_ln_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+
+    uint8_t modifiers = get_mods();
+
+    oled_write_ln_P((modifiers & MOD_MASK_SHIFT) ? PSTR("SHIFT") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_CTRL) ? PSTR("CTRL ") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_ALT) ? PSTR("ALT  ") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_GUI) ? PSTR("SUPER") : PSTR("\n"), false);
+
+    oled_write_P(PSTR("\n"), false);
 
 }
 #endif
