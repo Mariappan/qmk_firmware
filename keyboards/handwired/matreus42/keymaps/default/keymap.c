@@ -3,6 +3,8 @@
 
 #include QMK_KEYBOARD_H
 
+#include <print.h>
+
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
@@ -42,3 +44,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO,   KC_VOLU, KC_NO,   KC_NO,   RESET,                     KC_NO,   KC_F1,   KC_F2,   KC_F3,   KC_F12  ,
     KC_NO,   KC_VOLD, KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC,  TO(_QW), KC_PSCR, KC_SLCK, KC_PAUS )
 };
+
+#ifdef MATREUS_LED
+
+void keyboard_pre_init_user(void)
+{
+    // Set layer LED as an output
+    setPinOutput(B3);
+    setPinOutput(B4);
+    setPinOutput(B5);
+
+    writePinLow(B3);
+    writePinLow(B4);
+    writePinLow(B5);
+}
+
+uint32_t layer_state_set_user(uint32_t state)
+{
+    // Switch layer LED accordingly
+    switch (get_highest_layer(state)) {
+    case _QW:
+        writePinLow(B3);
+        writePinLow(B4);
+        writePinLow(B5);
+        break;
+    case _RS:
+        writePinHigh(B3);
+        writePinLow(B4);
+        writePinLow(B5);
+        break;
+    case _LW:
+        writePinLow(B3);
+        writePinHigh(B4);
+        writePinLow(B5);
+        break;
+    }
+    return state;
+}
+
+#endif
+

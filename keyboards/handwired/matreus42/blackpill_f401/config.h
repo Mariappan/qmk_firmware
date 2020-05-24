@@ -29,6 +29,8 @@
 
 #define UNUSED_PINS
 
+#define MATREUS_LED
+
 // #define BACKLIGHT_PIN           A0
 // #define BACKLIGHT_PWM_DRIVER    PWMD2
 // #define BACKLIGHT_PWM_CHANNEL   1
