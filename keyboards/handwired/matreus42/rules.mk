@@ -21,3 +21,7 @@ HD44780_ENABLE = no         # Enable support for HD44780 based LCDs (+400)
 
 DEFAULT_FOLDER = handwired/matreus42/blackpill_f401
 LAYOUTS = atreus42
+
+
+SRC += pwmled.c
+SRC += rgbled.c
