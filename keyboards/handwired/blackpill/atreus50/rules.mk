@@ -6,6 +6,5 @@ OPT_DEFS += -DCORTEX_ENABLE_WFI_IDLE=TRUE
 
 OLED_DRIVER_ENABLE = yes
 
-
 # project specific files
 SRC = led.c
