@@ -25,12 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // GENERIC
 #    ifndef PWMLED_PWM_DRIVER
-#        define PWMLED_PWM_DRIVER PWMD3
+#        define PWMLED_PWM_DRIVER PWMD4
 #    endif
-#    ifndef PWMLED_PWM_CHANNEL
-#        define PWMLED_PWM_CHANNEL 1
-#    endif
-
 
 bool is_pwmled_enabled(pwmled_config_t *config)
 {

@@ -29,7 +29,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    * lower  insert super shift bksp ctrl || alt space   fn    .     0    =
    */
   [_RS] = LAYOUT( /* [> RAISE <] */
-    KC_EXLM, KC_AT,   KC_UP,   KC_LCBR, KC_RCBR,                   KC_PGUP, KC_7,    KC_8,   KC_9, KC_ASTR ,
+    KC_EXLM, KC_AT,   KC_UP,   KC_LCBR, KC_RCBR,                   RESET,   KC_7,    KC_8,   KC_9, KC_ASTR ,
     KC_HASH, KC_LEFT, KC_DOWN, KC_RGHT, KC_DLR,                    KC_PGDN, KC_4,    KC_5,   KC_6, KC_PLUS ,
     KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_AMPR,                   KC_GRV,  KC_1,    KC_2,   KC_3, KC_BSLS ,
     TG(_LW), KC_INS,  KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC,  KC_TRNS, KC_DOT, KC_0, KC_EQL  ),
@@ -49,6 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void keyboard_pre_init_user(void)
 {
     rgbled_init();
+    rgbled_set(15, 15, 15);
 }
 
 uint32_t layer_state_set_user(uint32_t state)
@@ -56,13 +57,13 @@ uint32_t layer_state_set_user(uint32_t state)
     // Switch layer LED accordingly
     switch (get_highest_layer(state)) {
     case _QW:
-        rgbled_set(0, 15, 0);
+        rgbled_set(15, 15, 15);
         break;
     case _RS:
-        rgbled_set(2, 15, 0);
+        rgbled_set(2, 15, 3);
         break;
     case _LW:
-        rgbled_set(7, 0, 0);
+        rgbled_set(7, 0, 18);
         break;
     }
     return state;

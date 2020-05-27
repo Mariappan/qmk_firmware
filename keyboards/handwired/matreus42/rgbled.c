@@ -25,24 +25,30 @@ rgbled_config rgb;
 
 void rgbled_init()
 {
-    rgb.red.port = B4;
+    rgb.red.port = B6;
     rgb.red.mode = 2;
     rgb.red.channel = 1;
     pwmled_init(&rgb.red);
     pwmled_enable(&rgb.red);
-    pwmled_level(&rgb.red, 3);
 
-    rgb.green.port = B5;
+    rgb.green.port = B7;
     rgb.green.mode = 2;
     rgb.green.channel = 2;
     pwmled_init(&rgb.green);
     pwmled_enable(&rgb.green);
-    pwmled_level(&rgb.green, 3);
+
+    rgb.blue.port = B8;
+    rgb.blue.mode = 2;
+    rgb.blue.channel = 3;
+    pwmled_init(&rgb.blue);
+    pwmled_enable(&rgb.blue);
 }
 
 void rgbled_set(int red, int green, int blue)
 {
     pwmled_level(&rgb.red, red);
+    pwmled_level(&rgb.green, green);
+    pwmled_level(&rgb.blue, blue);
 }
 
 #endif // MATREUS_RGBLED
