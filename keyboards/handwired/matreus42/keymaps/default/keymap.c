@@ -45,3 +45,64 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO,   KC_VOLD, KC_LGUI, KC_LSFT, KC_BSPC, KC_LCTL, KC_LALT, KC_SPC,  TO(_QW), KC_PSCR, KC_SLCK, KC_PAUS )
 };
 
+void keyboard_pre_init_user(void)
+{
+    palSetPadMode(GPIOB, 4, PAL_MODE_OUTPUT_PUSHPULL);
+    palSetPadMode(GPIOB, 5, PAL_MODE_OUTPUT_PUSHPULL);
+    palClearPad(GPIOB, 4);
+    palSetPad(GPIOB, 5);
+}
+
+#ifdef OLED_DRIVER_ENABLE
+
+static void render_logo(void) {
+    static const char PROGMEM qmk_logo[] = {
+        0x81, 0x82, 0x83, 0x84, 0x80,
+        0xA1, 0xA2, 0xA3, 0xA4, 0xA0,
+        0xC1, 0xC2, 0xC3, 0xC4, 0xC0,
+        0x80, 0x80, 0x80, 0x80, 0x80,
+        0x80, 'Q',  'M',  'K',  '\n', '\n', '\n', 0x00
+    };
+
+    oled_write_P(qmk_logo, false);
+}
+
+
+// oled_rotation_t oled_init_user(oled_rotation_t rotation)
+// {
+//     return OLED_ROTATION_90;
+// }
+
+void oled_task_user(void) {
+    render_logo();
+
+    // Host Keyboard Layer Status
+    oled_write_ln_P(PSTR("Layer"), false);
+    switch (get_highest_layer(layer_state)) {
+        case _QW:
+            oled_write_P(PSTR("Def\n"), false);
+            oled_write_P(PSTR("\n"), false);
+            break;
+        default:
+            // Or use the write_ln shortcut over adding '\n' to the end of your string
+            oled_write_ln_P(PSTR("UND"), false);
+            oled_write_P(PSTR("\n"), false);
+    }
+
+    // Host Keyboard LED Status
+    // led_t led_state = host_keyboard_led_state();
+    // oled_write_ln_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
+    // oled_write_ln_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
+    // oled_write_ln_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+
+    uint8_t modifiers = get_mods();
+
+    oled_write_ln_P((modifiers & MOD_MASK_SHIFT) ? PSTR("SHIFT") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_CTRL) ? PSTR("CTRL ") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_ALT) ? PSTR("ALT  ") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_GUI) ? PSTR("SUPER") : PSTR("\n"), false);
+
+    oled_write_P(PSTR("\n"), false);
+
+}
+#endif
