@@ -23,7 +23,7 @@ USE_FPU = no
 STM32_BOOTLOADER_ADDRESS ?= 0x80000000
 
 # Options to pass to dfu-util when flashing
-DFU_ARGS = -d 1eaf:0003 -a 2 -s 0x08000000:leave
+DFU_ARGS = -d 1eaf:0003 -a 2
 DFU_SUFFIX_ARGS = -v 1eaf -p 0003
 
 # Build Options
