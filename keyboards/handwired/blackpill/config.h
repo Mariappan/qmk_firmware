@@ -52,7 +52,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define NO_ACTION_MACRO
 //#define NO_ACTION_FUNCTION
 
-#define OLED_TIMEOUT 10000
+#define OLED_DISPLAY_64X128
+
+// #define OLED_TIMEOUT 10000
 #define NODEBUG
 
-#define OLED_SCROLL_TIMEOUT 3000
+// #define OLED_IC             OLED_IC_SH1106
+ #define OLED_IC             OLED_IC_SH1107

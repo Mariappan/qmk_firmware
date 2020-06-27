@@ -156,7 +156,7 @@ static void render_logo(void) {
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation)
 {
-    return OLED_ROTATION_90;
+    return OLED_ROTATION_0;
 }
 
 void oled_task_user(void) {

@@ -103,15 +103,15 @@ static void render_logo(void) {
 }
 
 
-oled_rotation_t oled_init_user(oled_rotation_t rotation)
-{
-    return OLED_ROTATION_90;
-}
+// oled_rotation_t oled_init_user(oled_rotation_t rotation)
+// {
+//     return OLED_ROTATION_0;
+// }
 
 void oled_task_user(void) {
     render_logo();
 
-    oled_write_ln_P(PSTR("Layer:"), false);
+    oled_write_ln_P(PSTR("Layer"), false);
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
             oled_write_ln_P(PSTR("Def\n"), false);
