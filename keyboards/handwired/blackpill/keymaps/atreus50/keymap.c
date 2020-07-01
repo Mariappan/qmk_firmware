@@ -143,14 +143,19 @@ void matrix_init_user(void) {
 
 static void render_logo(void) {
     static const char PROGMEM qmk_logo[] = {
+        0x80, 0x80, 0x80,
         0x81, 0x82, 0x83, 0x84, 0x80,
+        0x80, 0x80,
+        0x80, 0x80, 0x80,
         0xA1, 0xA2, 0xA3, 0xA4, 0xA0,
+        0x80, 0x80,
+        0x80, 0x80, 0x80,
         0xC1, 0xC2, 0xC3, 0xC4, 0xC0,
         0x80, 0x80, 0x80, 0x80, 0x80,
         0x80, 'Q',  'M',  'K',  '\n', '\n', '\n', 0x00
     };
 
-    oled_write_P(qmk_logo, false);
+    oled_write_ln_P(qmk_logo, false);
 }
 
 
@@ -163,36 +168,36 @@ void oled_task_user(void) {
     render_logo();
 
     // Host Keyboard Layer Status
-    oled_write_ln_P(PSTR("Layer"), false);
+    // oled_write_ln_P(PSTR("Layer:"), false);
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-            oled_write_P(PSTR("Def\n"), false);
-            oled_write_P(PSTR("\n"), false);
+            oled_write_ln_P(PSTR("Default\n"), false);
+            oled_write_ln_P(PSTR("\n"), false);
             break;
         case _COLEMAK:
-            oled_write_P(PSTR("COLE\n"), false);
-            oled_write_P(PSTR("\n"), false);
+            oled_write_ln_P(PSTR("Colemak\n"), false);
+            oled_write_ln_P(PSTR("\n"), false);
             break;
         case _DVORAK:
-            oled_write_P(PSTR("DVOR\n"), false);
-            oled_write_P(PSTR("\n"), false);
+            oled_write_ln_P(PSTR("Dvorak\n"), false);
+            oled_write_ln_P(PSTR("\n"), false);
             break;
         case _RAISE:
-            oled_write_P(PSTR("FN\n"), false);
-            oled_write_P(PSTR("\n"), false);
+            oled_write_ln_P(PSTR("Func\n"), false);
+            oled_write_ln_P(PSTR("\n"), false);
             break;
         case _LOWER:
-            oled_write_P(PSTR("LOWR\n"), false);
-            oled_write_P(PSTR("\n"), false);
+            oled_write_ln_P(PSTR("Lower\n"), false);
+            oled_write_ln_P(PSTR("\n"), false);
             break;
         case _MOUSE:
-            oled_write_P(PSTR("MOUSE\n"), false);
-            oled_write_P(PSTR("\n"), false);
+            oled_write_ln_P(PSTR("Mouse\n"), false);
+            oled_write_ln_P(PSTR("\n"), false);
             break;
         default:
             // Or use the write_ln shortcut over adding '\n' to the end of your string
             oled_write_ln_P(PSTR("UND"), false);
-            oled_write_P(PSTR("\n"), false);
+            oled_write_ln_P(PSTR("\n"), false);
     }
 
     // Host Keyboard LED Status
@@ -203,12 +208,12 @@ void oled_task_user(void) {
 
     uint8_t modifiers = get_mods();
 
-    oled_write_ln_P((modifiers & MOD_MASK_SHIFT) ? PSTR("SHIFT") : PSTR("\n"), false);
-    oled_write_ln_P((modifiers & MOD_MASK_CTRL) ? PSTR("CTRL ") : PSTR("\n"), false);
-    oled_write_ln_P((modifiers & MOD_MASK_ALT) ? PSTR("ALT  ") : PSTR("\n"), false);
-    oled_write_ln_P((modifiers & MOD_MASK_GUI) ? PSTR("SUPER") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_SHIFT) ? PSTR("SHIFT\n") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_CTRL) ? PSTR("CTRL\n") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_ALT) ? PSTR("ALT\n") : PSTR("\n"), false);
+    oled_write_ln_P((modifiers & MOD_MASK_GUI) ? PSTR("SUPER\n") : PSTR("\n"), false);
 
-    oled_write_P(PSTR("\n"), false);
+    oled_write_ln_P(PSTR("\n"), false);
 
 }
 #endif
